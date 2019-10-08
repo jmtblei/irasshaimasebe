@@ -4,7 +4,9 @@ module.exports = {
     add,
     find,
     findBy,
-    findById
+    findById,
+    remove,
+    findByIdAndUpdate
 };
 
 function find() {
@@ -25,4 +27,17 @@ function findById(id) {
     return db("reservations")
         .where({ id })
         .first();
+}
+
+function remove(id) {
+    return db("reservations")
+        .where({ id })
+        .first()
+        .del();
+}
+
+function findByIdAndUpdate(reservation, id) {
+    return db("reservations")
+        .where({ id })
+        .update(reservation);
 }

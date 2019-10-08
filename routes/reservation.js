@@ -29,4 +29,12 @@ router.get("/", restricted, (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
+router.get("/:id", restricted, (req, res) => {
+    Reserve.findById(req.params.id)
+        .then(reservation => {
+            return res.status(200).json(reservation);
+        })
+        .catch(err => res.status(500).json(err));
+})
+
 module.exports = router;

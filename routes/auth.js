@@ -5,6 +5,7 @@ const createToken = require('../data/workers/auth/token');
 
 const Users = require('../data/models/user');
 
+//register a user
 router.post("/register", (req, res) => {
     let user = req.body;
     const { username, password } = req.body;
@@ -24,6 +25,7 @@ router.post("/register", (req, res) => {
       });
 });
 
+//login as user
 router.post("/login", (req, res) => {
     let { username, password } = req.body;
   

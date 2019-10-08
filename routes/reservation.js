@@ -4,6 +4,8 @@ const restricted = require('../data/workers/auth/restricted');
 
 const Reserve = require('../data/models/reservations');
 
+
+//add a reservation
 router.post("/", restricted, (req, res) => {
     let reservation = req.body;
     const { firstname, lastname, phonenumber, partysize } = req.body;
@@ -17,18 +19,20 @@ router.post("/", restricted, (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
+//get all reservations of all users
 router.get("/", restricted, (req, res) => {
     Reserve.find()
         .then(reservation => {
             if (reservation) {
                 return res.status(200).json(reservation);
             } else {
-                return res.status(404).json({ error: "Reservation not found" });
+                return res.status(404).json({ error: "Reservations not found" });
             }
         })
         .catch(err => res.status(500).json(err));
 });
 
+//get reservation by id
 router.get("/:id", restricted, (req, res) => {
     Reserve.findById(req.params.id)
         .then(reservation => {
@@ -41,6 +45,7 @@ router.get("/:id", restricted, (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
+//edit specific reservation entry
 router.put("/:id", restricted, (req, res) => {
     let reservation = req.body;
     let id = req.params.id;
@@ -55,6 +60,7 @@ router.put("/:id", restricted, (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
+//delete reservation entry
 router.delete("/:id", restricted, (req, res) => {
     Reserve.remove(req.params.id)
         .then(deleted => {

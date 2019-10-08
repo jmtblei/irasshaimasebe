@@ -39,7 +39,6 @@ async function findById(id) {
 
 async function findReservationsByUserId(id) {
   const reservations = await db("reservations").where({ user_id: id });
-  console.log(reservations);
   return reservations;
 }
 

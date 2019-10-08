@@ -4,6 +4,7 @@ const restricted = require('../data/workers/auth/restricted');
 
 const Users = require('../data/models/user');
 
+//get all users
 router.get("/", restricted, (req, res) => {
     Users.find()
       .then(users => {
@@ -16,6 +17,7 @@ router.get("/", restricted, (req, res) => {
       .catch(err => res.status(500).send(err));
 });
 
+//get user by id
 router.get("/:id", restricted, (req, res) => {
     Users.findById(req.params.id)
       .then(user => {
@@ -28,6 +30,20 @@ router.get("/:id", restricted, (req, res) => {
       .catch(err => res.send(err));
 });
 
+//get user by id and all their reservations
+router.get("/:id/reservations", restricted, (req, res) => {
+  Users.findReservationsByUserId(req.params.id)
+    .then(userRes => {
+      if (userRes) {
+        return res.status(200).json(userRes);
+      } else {
+        return res.status(404).json({ error: "User does not exist." });
+      }
+    })
+    .catch(err => res.send(err));
+})
+
+//edit user
 router.put("/:id", restricted, (req, res) => {
     let user = req.body;
     let id = req.params.id;
@@ -44,6 +60,7 @@ router.put("/:id", restricted, (req, res) => {
       .catch(error => res.status(500).json(error));
 });
 
+//delete a user
 router.delete("/:id", restricted, (req, res) => {
     Users.remove(req.params.id)
       .then(deleted => {

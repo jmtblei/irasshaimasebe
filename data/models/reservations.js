@@ -16,8 +16,8 @@ function findBy(filter) {
         .where(filter);
 }
 
-async function add(event) {
-    const [id] = await db("reservations").insert(event);
+async function add(reservation) {
+    const [id] = await db("reservations").insert(reservation);
     return findById(id);
 }
 

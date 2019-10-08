@@ -32,9 +32,39 @@ router.get("/", restricted, (req, res) => {
 router.get("/:id", restricted, (req, res) => {
     Reserve.findById(req.params.id)
         .then(reservation => {
-            return res.status(200).json(reservation);
+            if (reservation) {
+                return res.status(200).json(reservation);
+            } else {
+                return res.status(404).json({ message: "Reservation doesn't exist!" })
+            }
         })
         .catch(err => res.status(500).json(err));
-})
+});
+
+router.put("/:id", restricted, (req, res) => {
+    let reservation = req.body;
+    let id = req.params.id;
+    Reserve.findByIdAndUpdate(reservation, id)
+        .then(updated => {
+            if (updated) {
+                return res.status(200).json({ message: "Reservation has been updated." });
+            } else {
+                return res.status(404).json({ message: "Please provide all fields to update." });
+            }
+        })
+        .catch(err => res.status(500).json(err));
+});
+
+router.delete("/:id", restricted, (req, res) => {
+    Reserve.remove(req.params.id)
+        .then(deleted => {
+            if (deleted) {
+                return res.status(200).json({ message: "Reservation has been deleted." });
+            } else {
+                return res.status(404).json({ message: "Unable to delete reservation." });
+            }
+        })
+        .catch(err => res.status(500).json(err))
+});
 
 module.exports = router;

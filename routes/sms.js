@@ -1,26 +1,34 @@
+const express = require('express');
+const router = express.Router();
+const restricted = require('../data/workers/auth/restricted');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
-module.exports = {
-    smsReady,
-    smsSorry
-};
-
-function smsReady(to, size) {
+router.post("/ready", restricted, (req, res) => {
     client.messages
         .create({
             body: `We are ready to accommodate your reservation for ${size}. Please come to the front with all members to be seated!`,
             from: process.env.TWILIO_PHONE_NUMBER,
             to: `+1${to}`
         })
-};
+        .then(sent => {
+            return res.status(200).json(sent);
+        })
+        .catch(err => res.send(err))
+})
 
-function smsSorry(to) {
+router.post("/sorry", restricted, (req, res) => {
     client.messages
         .create({
             body: 'Unfortunately, we are unable to accommodate any reservations at this time. Sorry for the inconvenience.',
             from: process.env.TWILIO_PHONE_NUMBER,
             to: `+1${to}`
         })
-}
+        .then(sent => {
+            return res.status(200).json(sent);
+        })
+        .catch(err => res.send(err))
+})
+
+module.exports = router;

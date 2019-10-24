@@ -23,10 +23,11 @@ router.post("/ready", restricted, (req, res) => {
 
 //sends sms to customer alerting them no more reservations available at this time
 router.post("/sorry", restricted, (req, res) => {
+    const size = req.body.size;
     const to = req.body.to;
     client.messages
         .create({
-            body: 'Unfortunately, we are unable to accommodate any reservations at this time. Sorry for the inconvenience.',
+            body: `Unfortunately, we are unable to accommodate any reservations at this time for ${size}. Sorry for the inconvenience.`,
             from: process.env.TWILIO_PHONE_NUMBER,
             to: `+1${to}`
         })

@@ -2,12 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 
-const server = express();
-
 const authRoutes = require('../routes/auth');
 const userRoutes = require('../routes/user');
 const resRoutes = require('../routes/reservation');
 const smsRoutes = require('../routes/sms');
+
+const server = express();
 
 server.use(helmet());
 server.use(express.json());
